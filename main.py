@@ -2,13 +2,47 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 
+
+def intersection(lst1, lst2):
+    lst3 = [value for value in lst1 if value in lst2]
+    return lst3
 btcjpyticker = yf.Ticker("BTC-JPY")
-
 hist = btcjpyticker.history(period="1mo",interval="1h")
-
+"""
 print(hist)
 print(hist.columns)
 print(hist.index)
 print(type(hist))
-plt.plot(hist.Close)
+"""
+hist["EMA5"] = hist["Close"].ewm(span=5).mean()
+hist["EMA25"] = hist["Close"].ewm(span=25).mean()
+hist["SMA25"] = hist["Close"].rolling(25).mean()
+
+hist["MACD"] = hist["EMA5"] - hist["EMA25"]
+hist["Signal"] = hist["MACD"].ewm(span=9).mean()
+
+
+hist["g_point"] = False
+for i in range(len(hist.index)-1):
+    hist["g_point"].iat[i+1] = False
+    if(hist.MACD[i]<hist.Signal[i] and hist.MACD[i+1]>hist.Signal[i+1]):
+        hist["g_point"].iat[i+1] = True
+
+
+
+
+
+fig = plt.figure()
+
+up = fig.add_subplot(2,1,1)
+down = fig.add_subplot(2,1,2)
+
+up.plot(hist.index,hist["Close"],color="black")
+up.plot(hist.index,hist["EMA5"],color="green")
+up.plot(hist.index,hist["SMA25"],color="orange")
+down.plot(hist.index,hist["MACD"],color="blue")
+down.plot(hist.index,hist["Signal"],color="red")
+up.legend(["Close","EMA5"])
+down.legend(["MACD","Signal"])
+
 plt.show()
