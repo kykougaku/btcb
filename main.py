@@ -3,9 +3,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 
-def intersection(lst1, lst2):
-    lst3 = [value for value in lst1 if value in lst2]
-    return lst3
 btcjpyticker = yf.Ticker("BTC-JPY")
 hist = btcjpyticker.history(period="1mo",interval="1h")
 """
