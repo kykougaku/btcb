@@ -35,9 +35,9 @@ print(hist.columns)
 print(hist.index)
 print(type(hist))
 """
-s = 1
-l = 5
-sig = 7
+s = 18
+l = 23
+sig = 18
 
 yen_assets = 50000.0
 btc_assets_yen = 50000.0
@@ -94,5 +94,6 @@ down.legend(["MACD","Signal"])
 down.text(hist.index[0],5000,"s="+str(s)+"\nl="+str(l)+'\nsignal='+str(sig),fontsize=10)
 print(hist.loc[:,'total'].iat[-1])
 print(myassets.get_total(hist.loc[:,'Close'].iat[-1]))
+print(hist)
 plt.savefig("fig.png",dpi=300)
 plt.show()
