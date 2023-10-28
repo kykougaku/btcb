@@ -2,16 +2,21 @@ import yfinance as yf
 import pandas as pd
 import matplotlib.pyplot as plt
 import time
-
+"""
 btcjpyticker = yf.Ticker("BTC-JPY")
-hist = btcjpyticker.history(period="1mo",interval="1h")
+hist = btcjpyticker.history(period="2y",interval="1h")
+"""
+hist = pd.read_csv("btcjpy_data_from_yfinance-2y-1h.csv")
+hist["Datetime"] = pd.to_datetime(hist["Datetime"])
+hist.set_index("Datetime",inplace=True)
 
+print(hist.head())
 yen_assets = 50000.0
 btc_assets_yen = 50000.0
 
-s = 45
-l = 47
-sig = 10
+s = 16
+l = 23
+sig = 15
 
 starttime = time.time()
 
@@ -68,7 +73,6 @@ up.plot(hist.index,hist["SMA25"],color="orange")
 down.plot(hist.index,hist["MACD"],color="blue")
 down.plot(hist.index,hist["Signal"],color="red")
 down2.plot(hist.index,hist["total"],color="black")
-
 for i in range(len(hist.index)):
     if(hist.loc[:,'g_point'].iloc[i]):
         up.scatter(hist.index[i],hist.loc[:,'Close'].iloc[i],facecolor="none",edgecolors="blue",)
@@ -81,6 +85,4 @@ up.legend(["Close","SMA25"])
 down.legend(["MACD","Signal"])
 
 down.text(hist.index[0],5000,"s="+str(s)+"\nl="+str(l)+'\nsignal='+str(sig),fontsize=10)
-plt.savefig("fig.png",dpi=300)
-hist.to_csv("hist.csv")
 plt.show()

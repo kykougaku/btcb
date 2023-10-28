@@ -28,16 +28,16 @@ class assets:
 
 
 btcjpyticker = yf.Ticker("BTC-JPY")
-hist = btcjpyticker.history(period="1y",interval="1h")
+hist = btcjpyticker.history(period="2y",interval="1h")
 """
 print(hist)
 print(hist.columns)
 print(hist.index)
 print(type(hist))
 """
-s = 18
+s = 16
 l = 23
-sig = 18
+sig = 15
 
 yen_assets = 50000.0
 btc_assets_yen = 50000.0
@@ -95,5 +95,5 @@ down.text(hist.index[0],5000,"s="+str(s)+"\nl="+str(l)+'\nsignal='+str(sig),font
 print(hist.loc[:,'total'].iat[-1])
 print(myassets.get_total(hist.loc[:,'Close'].iat[-1]))
 print(hist)
-plt.savefig("fig.png",dpi=300)
+plt.savefig("fig"+str(s)+"-"+str(l)+"-"+str(sig)+".png",dpi=300)
 plt.show()

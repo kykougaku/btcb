@@ -1,10 +1,13 @@
 import yfinance as yf
 import pandas as pd
 import time
-
+"""
 btcjpyticker = yf.Ticker("BTC-JPY")
 hist = btcjpyticker.history(period="2y",interval="1h")
-
+"""
+hist = pd.read_csv("btcjpy_data_from_yfinance-2y-1h.csv",index_col=0)
+hist["Datetime"] = pd.to_datetime(hist["Datetime"])
+hist.set_index("Datetime",inplace=True)
 
 columns1 =["s", "l", "signal","gold","silver","assets"]
 result = pd.DataFrame(columns=columns1)
