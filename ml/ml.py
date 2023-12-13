@@ -14,7 +14,7 @@ def twotype_label_func(x):
     else: return 0
 
 def read_data():
-    df = pd.read_csv("btcjpy_data_from_yfinance-2y-1d.csv",usecols=csv_use_cols)
+    df = pd.read_csv("btcjpy_data_from_yfinance-5y-1d.csv",usecols=csv_use_cols)
     return df
 
 def labeling(df):
@@ -51,7 +51,7 @@ def data_modify(df):
     return df
 
 def get_score(X, Y):
-    my_pipeline = Pipeline(steps=[("model", lgb.LGBMClassifier(n_estimators=5000, learning_rate=0.005,n_jobs=4,random_state=0))])
+    my_pipeline = Pipeline(steps=[("model", lgb.LGBMClassifier(n_estimators=10000, learning_rate=0.005,n_jobs=4,random_state=0))])
     return cross_val_score(my_pipeline, X, Y, cv=5, scoring="neg_log_loss").mean()
 
 def main():
