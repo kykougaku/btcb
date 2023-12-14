@@ -10,11 +10,11 @@ csv_use_cols = ["Date", "Open", "High", "Low", "Close", "Volume"]
 shift = 5
 
 def twotype_label_func(x):
-    if x < -0.05: return 1
+    if x > 0.05: return 1
     else: return 0
 
 def read_data():
-    df = pd.read_csv("btcjpy_data_from_yfinance-5y-1d.csv",usecols=csv_use_cols)
+    df = pd.read_csv("btcjpy_data_from_yfinance-2y-1d.csv",usecols=csv_use_cols)
     return df
 
 def labeling(df):
@@ -52,33 +52,29 @@ def data_modify(df):
 
 def get_score(X, Y):
     my_pipeline = Pipeline(steps=[("model", lgb.LGBMClassifier(n_estimators=5000, learning_rate=0.005,n_jobs=4,random_state=0))])
-    return cross_val_score(my_pipeline, X, Y, cv=4, scoring="neg_log_loss").mean()
+    return cross_val_score(my_pipeline, X, Y, cv=5, scoring="neg_log_loss").mean()
+
+def plot(df):
+    fig = plt.figure(figsize=(12, 8))
+    fig1 = fig.add_subplot(2, 1, 1)
+    fig2 = fig.add_subplot(2, 1, 2)
+
+    fig1.plot(df["Date"], df["Close"], label="Close")
+    fig1.plot(df["Date"], df["EMA75"], label="EMA75")
+
+    fig2.plot(df["Date"], df["RSI"], label="RSI")
+    fig2.plot(df["Date"], df["MFI"], label="MFI")
+
+    fig1.legend()
+    fig2.legend()
+
+    plt.savefig("plot.png")
+    plt.show()
 
 def main():
     df = read_data()
-    df = labeling(df)
     df = data_modify(df)
-
-    print(df.head())
-
-    mlcols = []
-    for i in range(0, shift+1):
-        mlcols.append("Open-{0}ratio".format(i))
-        mlcols.append("High-{0}ratio".format(i))
-        mlcols.append("Low-{0}ratio".format(i))
-        mlcols.append("Close-{0}ratio".format(i))
-        mlcols.append("EMA5-{0}ratio".format(i))
-        mlcols.append("EMA10-{0}ratio".format(i))
-        mlcols.append("EMA25-{0}ratio".format(i))
-        mlcols.append("EMA50-{0}ratio".format(i))
-        mlcols.append("EMA75-{0}ratio".format(i))
-        mlcols.append("Volume-{0}".format(i))
-        mlcols.append("RSI-{0}".format(i))
-        mlcols.append("MFI-{0}".format(i))
-
-    X = df[mlcols]
-    Y = df["target"]
-    print(get_score(X, Y))
+    plot(df)
 
 if __name__ == "__main__":
     main()
