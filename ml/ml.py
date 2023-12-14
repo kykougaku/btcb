@@ -10,7 +10,7 @@ csv_use_cols = ["Date", "Open", "High", "Low", "Close", "Volume"]
 shift = 5
 
 def twotype_label_func(x):
-    if x > 0.05: return 1
+    if x < -0.05: return 1
     else: return 0
 
 def read_data():
@@ -52,7 +52,7 @@ def data_modify(df):
 
 def get_score(X, Y):
     my_pipeline = Pipeline(steps=[("model", lgb.LGBMClassifier(n_estimators=5000, learning_rate=0.005,n_jobs=4,random_state=0))])
-    return cross_val_score(my_pipeline, X, Y, cv=5, scoring="neg_log_loss").mean()
+    return cross_val_score(my_pipeline, X, Y, cv=4, scoring="neg_log_loss").mean()
 
 def main():
     df = read_data()
