@@ -50,9 +50,9 @@ def data_modify(df):
     df.reset_index(drop=True, inplace=True)
     return df
 
-def get_score(X, Y):
+def get_score(X, Y,scoring):
     my_pipeline = Pipeline(steps=[("model", lgb.LGBMClassifier(n_estimators=5000, learning_rate=0.005,n_jobs=4,random_state=0))])
-    return cross_val_score(my_pipeline, X, Y, cv=4, scoring="neg_log_loss").mean()
+    return cross_val_score(my_pipeline, X, Y, cv=4, scoring=scoring).mean()
 
 def main():
     df = read_data()
@@ -78,7 +78,7 @@ def main():
 
     X = df[mlcols]
     Y = df["target"]
-    print(get_score(X, Y))
+    print(get_score(X=X,Y=Y,scoring='precision'))
 
 if __name__ == "__main__":
     main()
