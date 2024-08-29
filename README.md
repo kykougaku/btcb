@@ -1,4 +1,4 @@
-``## talibのインストール
+## talibのインストール
 
 ```bash
 wget https://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
@@ -17,7 +17,7 @@ pip install -r requirements.txt
 deactivate
 ```
 
-requirements.txtの更新
+## requirements.txtの更新
 ```bash
 pip freeze > requirements.txt
 ```
